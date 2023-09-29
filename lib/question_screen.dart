@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:adv_basics/models/answer_button.dart';
 import 'package:adv_basics/data/question.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class QuestionsScreen extends StatefulWidget {
-  const QuestionsScreen({Key? key}) : super(key: key);
+  const QuestionsScreen({Key? key, required this.onSelectedAnswer}) : super(key: key);
+  final void Function(String answer) onSelectedAnswer;
+
   @override
   State<QuestionsScreen> createState() => _QuestionsScreenState();
 }
 
 class _QuestionsScreenState extends State<QuestionsScreen> {
-
   var currentQuestionIndex = 0;
 
-  void answerQuestion() {
+
+  void answerQuestion(String answer) {
     setState(() {
+      widget.onSelectedAnswer(answer);
       currentQuestionIndex++;
     });
-  } 
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentQuestion = questions[currentQuestionIndex];
@@ -30,18 +35,23 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
           children: [
             Text(
               currentQuestion.question,
-              style: TextStyle(fontSize: 20, color: Colors.white),
               textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
-            ...currentQuestion.getShuffleAnswers().map(
-              (answer) => AnswerButton(
-                answerText: answer,
-                onTap: () {
-                  answerQuestion();
-                },
+              style: GoogleFonts.lato(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 26, 5, 49),
               ),
             ),
+            const SizedBox(height: 20),
+            ...currentQuestion.shuffledAnswers.map(
+                  (answer) => AnswerButton(
+                    answerText: answer,
+                    
+                    onTap: () {
+                      answerQuestion(answer);
+                    },
+                  ),
+                ),
           ],
         ),
       ),

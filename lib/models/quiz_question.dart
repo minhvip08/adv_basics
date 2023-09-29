@@ -9,7 +9,7 @@ class QuizQuestion {
     // required this.correctAnswer,
   );
 
-  List<String> getShuffleAnswers() {
+  List<String> get shuffledAnswers {
     final answers = this.answers.toList();
     answers.shuffle();
     return answers;
